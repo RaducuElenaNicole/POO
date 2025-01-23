@@ -1,0 +1,206 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<iostream>
+
+using namespace std;
+
+class Produs {
+private:
+	const int codBare;
+	char* denumire;
+	float pret;
+	int nrIngrediente;
+	float* ingrediente;
+	static string magazin;//este acelasi pentru toate produsele
+
+
+public:
+
+	Produs():codBare(12121) {
+		this->denumire = new char[strlen("D") + 1];
+		strcpy(this->denumire, "D");
+		this->pret = 100;
+		//this->nrIngrediente = 0;
+		//this->ingrdinte = NULL;
+		this->nrIngrediente = 2;
+		this->ingrediente = new float[nrIngrediente];
+		this->ingrediente[0] = 3.9;
+		this->ingrediente[1] = 8.9;
+		/*for (int i = 0; i < nrIngrediente; i++) {
+			this->ingrdinte[i] = 10.99;
+		}*/
+	}
+
+	//const hibrid- el nu are ttoti param, pt atributele care nu au parametrii mergem ca la constr defaut
+	Produs(char* denumire, float pret):codBare(2222) {
+		this->denumire = new char[strlen(denumire) + 1];
+		strcpy(this->denumire, denumire);
+		this->pret = pret;
+		this->nrIngrediente = 2;
+		this->ingrediente = new float[nrIngrediente];
+		this->ingrediente[0] = 3.9;
+		this->ingrediente[1] = 8.9;
+
+	}
+
+	//constr cu toti parametrii
+	Produs(const int codBare, const char* denumire, float pret, 
+		int nrIngrediente, float* ingrdinte):codBare(codBare) {
+		this->denumire = new char[strlen(denumire) + 1];
+		strcpy(this->denumire, denumire);
+		this->pret = pret;
+		this->nrIngrediente = nrIngrediente;
+		this->ingrediente = new float[nrIngrediente];
+		for (int i = 0; i < nrIngrediente; i++) {
+			this->ingrediente[i] = ingrdinte[i];
+		}
+
+	}
+
+	//constr de copy
+	Produs(const Produs& p):codBare(p.codBare) {
+		 
+			this->denumire = new char[strlen(p.denumire) + 1];
+			strcpy(this->denumire, p.denumire);
+			this->pret = p.pret;
+			this->nrIngrediente = p.nrIngrediente;
+			this->ingrediente = new float[p.nrIngrediente];
+			for (int i = 0; i < p.nrIngrediente; i++) {
+				this->ingrediente[i] = p.ingrediente[i];
+			}
+	}
+
+	//destructor-elibereza zonele de memorie dinamice(*), se apeleaza automat
+	//daca am atribute cu * este obligatoriu sa am dest ->regula celor 3(toti constr, op= si dest)
+	~Produs() {
+		if (this->denumire != NULL) {
+			delete[]this->denumire;
+		}
+		if (ingrediente != NULL) {
+			delete[]ingrediente;
+		}
+	}
+
+	//op=
+
+	Produs& operator=(const Produs& p) {
+		//destr+const de copiere+ return * this
+		//this->codBare = p.codBare;ERR!!!
+		if (this->denumire != NULL) {
+			delete[]this->denumire;
+		}
+		if (ingrediente != NULL) {
+			delete[]ingrediente;
+		}
+		this->denumire = new char[strlen(p.denumire) + 1];
+		strcpy(this->denumire, p.denumire);
+		this->pret = p.pret;
+		this->nrIngrediente = p.nrIngrediente;
+		this->ingrediente = new float[p.nrIngrediente];
+		for (int i = 0; i < p.nrIngrediente; i++) {
+			this->ingrediente[i] = p.ingrediente[i];
+		}
+		return *this;
+	}
+
+
+	//op<<-> nu este din cadrul clasei => nu are this
+	friend ostream& operator<<(ostream& out, Produs& p) {
+		out << p.codBare << endl;
+		out << p.denumire << endl;
+		out << p.pret << endl;
+		out << p.nrIngrediente << endl;
+		for (int i = 0; i < p.nrIngrediente; i++) {
+			out << p.ingrediente[i];
+		}
+		out << endl;
+		out << p.magazin << endl;
+
+		return out;
+	}
+
+	//metode accesor - get si set = acesul pentru atributele private
+	//get-acces la vizualizare, folosi valoarea 
+	//are return getAtribut() nu are parametrii
+	
+	const int getCod() {
+		return codBare;
+	}
+
+	char* getDenumire() {
+		return denumire;
+	}
+
+	//incapsulare-punerea in private a atr
+	/*char* getDenumire() {
+		char* copieLaDenumire = new char[strlen(denumire) + 1];
+		strcpy(copieLaDenumire, denumire);
+
+		return copieLaDenumire;
+	}*/
+	int getPret() {
+		return pret;
+	 }
+	int getNr() {
+		return nrIngrediente;
+	}
+
+	float* getIngrediente() {
+		return ingrediente;
+	}
+
+	float getIngredient(int pozitie) {
+		if(pozitie>=0 && pozitie<nrIngrediente && ingrediente!=NULL)
+		return ingrediente[pozitie];
+	}
+
+	static string getMagazin() {
+		return magazin;
+	}
+
+	//set - modifica un atr
+	//nu are tip ret: void dar are parametrii
+	//Pt const NU exista set
+
+	void setDenumire(const char* denumire_noua) {
+		if (this->denumire != NULL) {
+			delete[]this->denumire;
+		}
+		this->denumire = new char[strlen(denumire_noua) + 1];
+		strcpy(this->denumire, denumire_noua);
+	}
+
+
+	void setPret(float pret) {
+		this->pret = pret;
+	}
+
+	static void setMagazin(static string magazin_nou) {
+		magazin = magazin_nou;
+	}
+};
+
+string Produs::magazin = "Altex";
+
+
+void main() {
+	Produs p;
+	Produs p1(1211, "Corn", 5.99, 3, new float[3]{ 2.33,1.2,8.99 });
+	//constr de copiere
+	Produs p2(p1);
+	cout << p1 << p2 << endl;
+
+	cout << p << endl;
+	//op =
+	p = p1;
+	cout << p << endl;
+
+
+	cout << p.getIngrediente() << endl;
+	cout << p.getIngredient(2) << endl;
+	p.setMagazin("Carrefour");
+	cout << p << p1 << p2 << endl;
+
+	//ce se intampla daca dau delete pe denumire
+
+}
