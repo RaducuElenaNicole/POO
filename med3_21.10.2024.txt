@@ -1,0 +1,111 @@
+// SEDINTA 3 -> 21/10/2024
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+// functie -> in afar clasei
+
+// clasa -> matrita in care noi construim obiecte
+// abstractizare = luam obiecte din viata reala si le transpunem in cod
+class persoana {
+	// atribute -> caracteristici
+	// automat avem private daca nu mentionam noi nimic
+	const int cnp; // constante este un atr care nu se modifica
+private :
+	// nu am vizibiliatte in afara clasei
+	char* nume;
+	// incapsulare = atribute pe privat
+protected:
+	int varsta;
+	// se comporta ca private in afara clasei, dar se comporta ca public in clasa mostenita
+public:
+	string prenume;
+	// vizibila peste tot
+
+	// metoda = functie din cadrul unei clase
+	// constructor = metoda specifica clasei, care nu are tip returnat si care se numeste precum clasa
+	// constructor fara parametrii = default = implicit (implicit, deoarece se creeaza automat, daca nu este creat un constructor)
+	persoana():cnp(111) {
+		// pas 1: sa aloc memorie
+		nume = new char[strlen("Popa") + 1];
+
+		// pas 2: sa umplem vectorul
+		strcpy(nume, "Popa");
+		varsta = 18;
+		prenume = "Sara";
+
+	}
+
+	// constructor cu parametrii -> trebuie sa aiba parametrii pentru toate atributele
+	persoana(const int cnp,const char* nume, int varsta, string prenume):cnp(cnp) { // parametrul este mai putenic decat atributul (din clasa)
+		this->nume = new char[strlen(nume) + 1]; // atribut = parametru
+		strcpy(this->nume, nume);
+		this->varsta = varsta; //************
+		this->prenume = prenume;
+
+	}
+
+	// constructor de copiere -> constructor un obiect nou cu caracteristicile unui obiect deja existent
+	persoana(const persoana& p):cnp(p.cnp) {
+		this->nume = new char[strlen(p.nume) + 1];
+		strcpy(this->nume, p.nume);
+		varsta = p.varsta;
+		this->prenume = p.prenume;
+	}
+
+	// supraincarcarea -> eu il invat cum sa egaleze doua persoane
+	// p1 op = p -> modifica o persoana deja existenta cu atributele altei persoane deja existente
+	persoana& operator=(const persoana& p) {
+		// pas 1: dezalocam ce este dinamic *
+		if (nume != NULL) 
+		{ delete[]nume; }
+
+		// pas 2: atribuim valoare din p -> constructor de copiere
+		this->nume = new char[strlen(p.nume) + 1];
+		strcpy(this->nume, p.nume);
+		varsta = p.varsta;
+		this->prenume = p.prenume;
+
+		// pas 3: return this=&persoana
+		return *this; // valoarea 
+	}
+
+
+	// operator<< -> afisare cout<<p<<p1<<p2 -> afisare cascada 
+	// nu supraincarcam persoana si pt clasa ostream
+	// friend -> face doua clase prietene ca sa aiba acces la atributele private/protected
+	friend ostream& operator<<(ostream& out, persoana& p) {
+		out << p.cnp << endl;
+		out << p.nume << endl;
+		out << p.prenume << endl;
+		out << p.varsta << endl;
+
+		return out;
+	}
+};
+
+void main() {
+//daca eu nu fac niciun constructor se creaza automat constructor fara parametrii 
+	persoana p;
+	//cout << p.nume;
+	//cout << p.varsta;
+	cout << p.prenume<<endl;
+	int a = 40;
+	int b;
+	b = a;
+
+	persoana p1;
+	cout << p1 << endl;
+	persoana p2(20124, "Ionescu", 21, "Ana");
+	cout << p2 << endl;
+
+	//contr de copiere
+	persoana p3(p);
+	cout << p3 << endl;
+
+
+	//op=
+	p1 = p2;
+	cout << p1 << endl;
+}
