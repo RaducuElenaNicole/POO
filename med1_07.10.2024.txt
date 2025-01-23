@@ -1,0 +1,62 @@
+// SEDINTA 1 -> 07/10/2024 
+#include<iostream>
+using namespace std;
+
+int x = 10;
+
+//-f -> nu intorc niciun rezultat(nu calculeaza) -> void: afisare, modicare (actualizare), stergere
+//-f -> care calculeaza ceva: int, float, Student(clasa), char, char* - vector --> adresa de inceput a vector
+
+int suma(int a, int b) { // a,b -> variabile locale
+	int suma = 0; // suma -> variabila locala
+
+	return a + b;
+}
+
+void main(){
+	int rez = suma(3, 9);
+
+	cout << rez << endl;
+	cout << suma(7,12) << endl;
+
+
+	cout << x << endl;
+	cout << &x << endl;
+	int* p = &x;
+	cout << p << endl;
+	cout << *p << endl; // valoarea lui x
+
+	int y = 20;
+	p = &y;
+	cout << &y << endl;
+	cout << p << endl;
+
+	// vector static -> STACK
+	// nu isi schimba dimensiunea -> se aloca automat memoria
+
+	int vs[5]; // vector static
+	vs[0] = 7;
+	vs[1] = 2;
+	vs[2] = 4;
+	vs[3] = 10;
+	vs[4] = 77;
+
+	for (int i = 0; i < 5; i++) {
+		cout << vs[i] << " " ;
+	}
+	 
+	// vector dinamic -> alocare manuala de memorie
+	// se poate modifica dimensiunea
+
+	int dim = 5;
+	int* vd = new int[dim]; // vector dinamic 
+	for (int i = 0; i < 5; i++) {
+		// vd[i] = vs[i];
+		vd[i] = 10;
+	}
+
+	for (int i = 0; i < 5; i++) {
+		cout << vd[i] << " ";
+	}
+}
+
