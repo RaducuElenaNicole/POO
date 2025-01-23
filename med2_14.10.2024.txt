@@ -1,0 +1,196 @@
+// SEDINTA 2 -> 14/10/2024
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+using namespace std;
+
+// variabile globale
+int x = 10; 
+char c = 'e';
+float y = 1.2;
+
+// functii care NU returneaza nimic -> void -> afisare, actualizare/modificare, stergere
+void afisare(string nume) {
+	cout << nume << endl;
+}
+
+// functii care returneaza ceva -> int, float, class (ex. Student), string, int*, Student*, char*
+int functie(int a) {
+	// a este varibila locala
+	return 2 * a + 3;
+	int b = 2;
+	// b este varibila locala
+}
+
+// functie -> pentru ceva exterior clasei
+int functie(float x, int) {
+	return 2 * x;
+}
+
+
+//clasa -> este una singura 
+//studenti -> mai multi, oricati => obiecte
+class student {
+	// atribute => caracteristici
+	int id;
+	// atributul este privat -> se vede doar in clasa; private este default 
+private:
+	char* nume;
+	// incapsulare -> atributele private
+protected:
+	// mostenire -> se comporta ca private in general, in mostenire se comporta ca public
+	int varsta;
+public:
+	//vizibil peste tot
+	float medie;
+
+public:
+	// metoda = functia din cadrul clasei
+	// constructorii = metode specifice clasei care nu au tip returnat si se numesc precum clasa
+
+	// constructor default = constructor fara parametrii = constructor implicit
+	student() {
+		// se dau valori -> el face toate elemntele la fel
+		id = 0;
+		nume = new char[strlen("Liana") + 1];
+		strcpy_s(nume, strlen("Liana") + 1, "Liana");
+		varsta = 21;
+		medie = 10;
+	}
+};
+
+void main() {
+
+	cout << functie(-2) << endl;
+	cout << functie(-2, 0) << endl;
+	int rez = functie(3);
+	cout << rez << endl;
+	cout << x << endl;
+	//cout << a << endl; -> pt ca este local
+
+	afisare("Ana");
+
+
+
+	int a = 100;
+	int* p = &a;
+
+	cout << a << endl;
+	cout << &a << endl;
+	cout << p << endl;
+	cout << *p << endl;
+
+	// vector static -> dimensiune lui ramane aceiasi -> isi aloca singur memorie: STACK
+	int vs[5];
+	cout << vs << endl;
+	cout << vs + 1 << endl;
+	cout << vs + 2 << endl;
+	vs[0] = 2;
+	vs[1] = 22;
+	vs[2] = 12;
+	vs[3] = 1;
+	cout << *vs << endl;
+	cout << *(vs + 1) << endl;
+	cout << *vs + 1 << endl;
+	*(vs + 4) = 21;
+	for (int i = 0; i < 5; i++) {
+		cout << vs[i] << endl;
+	}
+	// vector dinamic -> are dimensiune care se poate modifica: HEAP
+	int dim = 5;
+	int* vd = new int[dim];
+	for (int i = 0; i < dim; i++) {
+		vd[i] = vs[i];
+	}
+
+	for (int i = 0; i < dim; i++) {
+		cout << vd[i] << endl;
+	}
+
+	dim = 7;
+	vd = new int[dim];
+	for (int i = 0; i < dim; i++) {
+		vd[i] = vs[i];
+	}
+	vd[5] = 10;
+	vd[6] = 100;
+	for (int i = 0; i < dim; i++) {
+		cout << vd[i] << endl;
+	}
+
+	//1 vector de float
+	int dim1 = 3;
+	float* vect = new float[dim1];
+	for (int i = 0; i < dim1; i++) {
+		vect[i] = 10.22;
+	}
+
+	for (int i = 0; i < dim1; i++) {
+		cout<<vect[i]<<endl;
+	}
+
+// vector de char* 
+	char* nume = new char[strlen("Liana") + 1];
+	strcpy_s(nume, strlen("Liana") + 1,"Liana");
+	cout << nume << endl;
+
+// exercitiu
+	int v[5] = { 4,2,7,3,9 };
+
+	cout << v << endl;
+	cout << v + 1 << endl;
+	for (int i = 0; i < 5; i++) {
+			cout<<	v[i] <<" ";
+			}
+	cout << endl;
+
+			int* p1=NULL; // CCCCCCx8 -> char*=> eroare 
+			p1 = v;
+			cout << p1 << endl;
+			*p1 = 13;//punem 13 pe prima pozitie a vect
+
+			p1++;//pointerul meu se muta pe 2 pozitie din vect
+			cout << p1 << endl;
+			*p1 = 12;//pe poz 2 punem 12
+			cout << v[2] << endl;//7
+			cout << &v[2] << endl;//adresa lui 7
+			p1 = &v[2];//p1 pointeaza la adresa lui 7
+
+			*p1 = 17;
+
+			p1 = v + 3;
+			*p1 = 22;
+			
+			*(v + 4) = 33;
+
+			p1 = v;
+			p1--;
+			cout << p1<< endl;
+			cout << *p1<< endl;
+			//*p1 = 88; EROAREEEE - nu am alocat memorie
+
+
+
+
+
+			student s; // desi eu nu am creat constructor, el isi face implici
+			//cout<<s.id<<endl;
+			//cout<<s.nume<<endl;
+			cout<<s.medie<<endl;
+			//cout<<s.varsta<<endl;
+
+// clasa cu vector pe clasa 
+
+			student s1; // apel pt contructorul default 
+			student s2;
+			student s3;
+
+			int nrStudenti = 4;
+			student* vectorStudenti = new student[nrStudenti];
+			vectorStudenti[0] = s1;
+			vectorStudenti[1] = s;
+			vectorStudenti[3] = s2;
+			vectorStudenti[2] = s3;
+
+			cout << s1.medie << endl;
+
+}
